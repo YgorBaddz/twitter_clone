@@ -27,6 +27,9 @@ export const formatPostDate = (createdAt) => {
 
 export const formatMemberSinceDate = (createdAt) => {
   const date = new Date(createdAt);
+  if (isNaN(date.getTime())) {
+    return "Joined Unknown";
+  }
   const months = [
     "January",
     "February",
