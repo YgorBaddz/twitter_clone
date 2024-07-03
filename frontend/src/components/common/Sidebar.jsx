@@ -10,26 +10,28 @@ import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const queryClient = useQueryClient();
-
-  const { mutate: logoutMutation } = useMutation({
+  const { mutate: logout } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch("api/auth/logout", {
+        const res = await fetch("/api/auth/logout", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
         });
-
         const data = await res.json();
 
-        if (!res.ok) throw new Error(data.error || "Logout went wrong");
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
       } catch (error) {
         throw new Error(error);
       }
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-    onError: () => toast.error("Logout failed"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+    onError: () => {
+      toast.error("Logout failed");
+    },
   });
-
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
   return (
@@ -89,7 +91,7 @@ const Sidebar = () => {
                 className="w-5 h-5 cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
-                  logoutMutation();
+                  logout();
                 }}
               />
             </div>

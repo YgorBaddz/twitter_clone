@@ -12,20 +12,21 @@ const useFollow = () => {
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Something went wrong");
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong!");
+        }
 
-        return data;
+        return;
       } catch (error) {
         throw new Error(error.message);
       }
     },
     onSuccess: () => {
-      Promise.all(
+      Promise.all([
         queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
-        queryClient.invalidateQueries({ queryKey: ["authUser"] })
-      );
+        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+      ]);
     },
-
     onError: (error) => {
       toast.error(error.message);
     },

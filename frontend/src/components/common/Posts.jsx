@@ -40,7 +40,9 @@ const Posts = ({ feedType, username, userId }) => {
         if (!res.ok) throw new Error(data.error || "Couldn't fetch posts");
 
         return data;
-      } catch (error) {}
+      } catch (error) {
+        throw new Error(error);
+      }
     },
   });
 
